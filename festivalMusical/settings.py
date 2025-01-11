@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'festivalMusical.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'curso',
+        'NAME': 'eventos',
         'USER': 'postgres',
         'PASSWORD':'1234',
         'HOST': 'localhost',
