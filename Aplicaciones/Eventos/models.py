@@ -6,7 +6,7 @@ class TipoUsuario(models.Model):
     id_tipo_usuario = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     estado = models.BooleanField(default=True)
-    fechaCreacion = models.DateTimeField()
+    fechaCreacion = models.DateTimeField(auto_now_add=True)
     fechaActualizacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -21,7 +21,7 @@ class Usuario(models.Model):
     correo = models.EmailField(unique=True)
     contraseña = models.CharField(max_length=255)
     estado = models.BooleanField(default=True)
-    creado_en = models.DateTimeField()
+    creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
     tipo_usuario = models.ForeignKey(TipoUsuario, on_delete=models.CASCADE)
 
@@ -32,7 +32,7 @@ class Biografía(models.Model):
     id_biografia = models.AutoField(primary_key=True)
     biografia = models.TextField()
     estado = models.BooleanField(default=True)
-    fechaCreacion = models.DateTimeField()
+    fechaCreacion = models.DateTimeField(auto_now_add=True)
     fechaActualizacion = models.DateTimeField(auto_now_add=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
@@ -47,7 +47,7 @@ class Festival(models.Model):
     fecha_fin = models.DateField()
     descripcion = models.TextField()
     estado = models.BooleanField(default=True)
-    fechaCreacion = models.DateTimeField()
+    fechaCreacion = models.DateTimeField(auto_now_add=True)
     fechaActualizacion = models.DateTimeField(auto_now_add=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
@@ -60,7 +60,7 @@ class Presentacion(models.Model):
     fecha = models.DateTimeField()
     duracion = models.IntegerField()
     estado = models.BooleanField(default=True)
-    fechaCreacion = models.DateTimeField()
+    fechaCreacion = models.DateTimeField(auto_now_add=True)
     fechaActualizacion = models.DateTimeField(auto_now_add=True)
     festival = models.ForeignKey(Festival, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -74,7 +74,7 @@ class Entrada(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     cantidad = models.IntegerField()
     estado = models.BooleanField(default=True)
-    fechaCreacion = models.DateTimeField()
+    fechaCreacion = models.DateTimeField(auto_now_add=True)
     fechaActualizacion = models.DateTimeField(auto_now_add=True)
     festival = models.ForeignKey(Festival, on_delete=models.CASCADE)
 
@@ -87,7 +87,7 @@ class Venta(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateTimeField()
     estado = models.BooleanField(default=True)
-    fechaCreacion = models.DateTimeField()
+    fechaCreacion = models.DateTimeField(auto_now_add=True)
     fechaActualizacion = models.DateTimeField(auto_now_add=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     entrada = models.ForeignKey(Entrada, on_delete=models.CASCADE)
