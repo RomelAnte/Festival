@@ -27,7 +27,7 @@ $(document).ready(function(){
     	}
     });
     /*Salir del sistema*/
-    $('.btn-exit').on('click', function(){
+	$('.btn-exit').on('click', function(){
     	swal({
 		  	title: 'You want out of the system?',
 		 	text: "The current session will be closed and will leave the system",
@@ -38,7 +38,7 @@ $(document).ready(function(){
 		},
 		function(isConfirm) {
 		  	if (isConfirm) {
-		    	window.location='index.html'; 
+		    	window.location.href = loginUrl; 
 		  	}
 		});
     });
