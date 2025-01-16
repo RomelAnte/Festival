@@ -25,12 +25,12 @@
                             </div>
                         </form>
                         <div class="mdl-list">
-                            {% for clientesTemp in clientes %}
+                            {% for administradoresTemp in administradores %}
                                 <div class="mdl-list__item mdl-list__item--two-line">
                                     <span class="mdl-list__item-primary-content">
                                         <i class="zmdi zmdi-account mdl-list__item-avatar"></i>
-                                        <span>{{clientesTemp.nombre}} {{clientesTemp.apellido}}</span>
-                                        <span class="mdl-list__item-sub-title">{{clientesTemp.ci}}</span>
+                                        <span>{{administradoresTemp.nombre}} {{administradoresTemp.apellido}}</span>
+                                        <span class="mdl-list__item-sub-title">{{administradoresTemp.ci}}</span>
                                     </span>
                                     <a href="#" class="btn btn-success">
                                         <i class="bi bi-pencil-square"></i>
@@ -61,7 +61,7 @@
                         Nuevo Cliente
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crearCliente' %}" method="POST">
+                        <form action="{% url 'crearAdministrador' %}" method="POST">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="date" id="fecha_nacimiento" style="color: transparent;" name="fecha_nacimiento">
+                                        <input class="mdl-textfield__input" type="date" id="fecha_nacimiento" name="fecha_nacimiento">
                                         <label class="mdl-textfield__label" for="fecha_nacimiento">Fecha de nacimiento</label>
                                     </div>
                                 </div>
