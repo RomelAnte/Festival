@@ -4,22 +4,48 @@
     <h3 class="text-center tittles">RESPONSIVE TILES</h3>
     <!-- Tiles -->
     <article class="full-width tile">
-        <div class="tile-text">
-            <span class="text-condensedLight">
-                2<br>
-                <small>Administrators</small>
-            </span>
-        </div>
-        <i class="zmdi zmdi-account tile-icon"></i>
+        <a href="{% url 'listadoAdministradores' %}">
+            <div class="tile-text">
+                <span class="text-condensedLight">
+                    {{admin}}<br>
+                    <small>Administrador</small>
+                </span>
+            </div>
+            <i class="zmdi zmdi-account tile-icon"></i>
+        </a>
     </article>
     <article class="full-width tile">
-        <div class="tile-text">
-            <span class="text-condensedLight">
-                71<br>
-                <small>Clients</small>
-            </span>
-        </div>
-        <i class="zmdi zmdi-accounts tile-icon"></i>
+        <a href="{% url 'listadoArtista' %}">
+            <div class="tile-text">
+                <span class="text-condensedLight">
+                    {{artistas}}<br>
+                    <small>Artistas</small>
+                </span>
+            </div>
+            <i class="zmdi zmdi-accounts tile-icon"></i>
+        </a>
+    </article>
+    <article class="full-width tile">
+        <a href="{% url 'listadoOrganizadores' %}">
+            <div class="tile-text">
+                <span class="text-condensedLight">
+                    {{organizadores}}<br>
+                    <small>Organizadores</small>
+                </span>
+            </div>
+            <i class="zmdi zmdi-accounts tile-icon"></i>
+        </a>
+    </article>
+    <article class="full-width tile">
+        <a href="{% url 'listadoArtista' %}">
+            <div class="tile-text">
+                <span class="text-condensedLight">
+                    {{asistentes}}<br>
+                    <small>Asistentes</small>
+                </span>
+            </div>
+            <i class="zmdi zmdi-accounts tile-icon"></i>
+        </a>
     </article>
     <article class="full-width tile">
         <div class="tile-text">

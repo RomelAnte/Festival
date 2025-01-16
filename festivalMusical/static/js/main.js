@@ -6,4 +6,20 @@ $(document).ready(function() {
             $(this).css("color", "transparent"); // Color transparente si está vacío
         }
     });
+
+    $("#fecha_inicio").on("input", function () {
+        if ($(this).val() !== "") {
+            $(this).css("color", "#000"); // Color negro si hay un valor
+        } else {
+            $(this).css("color", "transparent"); // Color transparente si está vacío
+        }
+    });
+
+    $("#fecha_fin").on("input", function () {
+        if ($(this).val() !== "") {
+            $(this).css("color", "#000"); // Color negro si hay un valor
+        } else {
+            $(this).css("color", "transparent"); // Color transparente si está vacío
+        }
+    });
 });
