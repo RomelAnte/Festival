@@ -2,15 +2,15 @@
 {% block body %}
 <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
-        <a href="#tabListClient" class="mdl-tabs__tab is-active">LISTADO</a>
-        <a href="#tabNewClient" class="mdl-tabs__tab">NUEVO</a>
+        <a href="#tabListClient" class="mdl-tabs__tab is-active" >LIST</a>
+        <a href="#tabNewClient" class="mdl-tabs__tab">NEW</a>
     </div>
     <div class="mdl-tabs__panel is-active" id="tabListClient">
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-success text-center tittles">
-                        Listado Administradores
+                        Customer List
                     </div>
                     <div class="full-width panel-content">
                         <form action="#">
@@ -25,33 +25,31 @@
                             </div>
                         </form>
                         <div class="mdl-list">
-                            {% for administradoresTemp in administradores %}
-                            <div class="mdl-list__item mdl-list__item--two-line">
-                                <span class="mdl-list__item-primary-content">
-                                    <i class="zmdi zmdi-account mdl-list__item-avatar"></i>
-                                    <span>{{administradoresTemp.nombre}} {{administradoresTemp.apellido}}</span>
-                                    <span class="mdl-list__item-sub-title">{{administradoresTemp.ci}}</span>
-                                </span>
-                                <a href="#" class="btn btn-success editar-administrador"
-                                    data-id="{{ administradoresTemp.ci }}" data-bs-toggle="modal"
-                                    data-bs-target="#form_actualizar">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                &nbsp;
-                                <a href="" class="btn btn-danger">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                                &nbsp;
-                                <a href="" class="btn btn-info">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                            </div>
+                            {% for clientTemp in clients %}
+                                <div class="mdl-list__item mdl-list__item--two-line">
+                                    <span class="mdl-list__item-primary-content">
+                                        <i class="zmdi zmdi-account mdl-list__item-avatar"></i>
+                                        <span>{{clientTemp.name}} {{clientTemp.last_name}}</span>
+                                        <span class="mdl-list__item-sub-title">{{clientTemp.ci}}</span>
+                                    </span>
+                                    <a href="" class="btn btn-success">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    &nbsp;
+                                    <a href="{% url 'eliminarUsuario' clientTemp.id_use %}" class="btn btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>  
+                                    &nbsp;
+                                    <a href="" class="btn btn-info">
+                                        <i class="bi bi-eye"></i>
+                                    </a>              
+                                </div>
                             {% endfor %}
                             <li class="full-width divider-menu-h"></li>
                         </div>
                     </div>
                 </div>
-
+                
             </div>
         </div>
     </div>
@@ -60,64 +58,55 @@
             <div class="mdl-cell mdl-cell--12-col">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-primary text-center tittles">
-                        Nuevo Administrador
+                        New Customer
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crearAdministrador' %}" method="POST">
+                        <form action="{% url 'crearCliente' %}" method="POST">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
-                                    <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
-                                    </legend><br>
+                                    <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; </legend><br>
                                 </div>
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
-                                            id="ci" name="ci">
+                                        <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?" id="ci" name="ci">
                                         <label class="mdl-textfield__label" for="ci">C.I.:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text"
-                                            pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="nombre" name="nombre">
-                                        <label class="mdl-textfield__label" for="nombre">Nombre:</label>
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="nombre" name="nombre">
+                                        <label class="mdl-textfield__label" for="nombre">Name:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text"
-                                            pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="apellido" name="apellido">
-                                        <label class="mdl-textfield__label" for="apellido">Apellido</label>
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="apellido" name="apellido">
+                                        <label class="mdl-textfield__label" for="apellido">Last name:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="date" id="fecha_nacimiento"
-                                            style="color: transparent;" name="fecha_nacimiento">
-                                        <label class="mdl-textfield__label" for="fecha_nacimiento">Fecha de
-                                            nacimiento</label>
+                                        <input class="mdl-textfield__input" type="date" id="fecha_nacimiento" style="color: transparent;" name="fecha_nacimiento">
+                                        <label class="mdl-textfield__label" for="fecha_nacimiento">Date of birth:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="email" id="correo" name="correo">
-                                        <label class="mdl-textfield__label" for="correo">Correo</label>
+                                        <input class="mdl-textfield__input" type="email" id="correo" name="correo"> 
+                                        <label class="mdl-textfield__label" for="correo">Email:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" id="contraseña"
-                                            name="contraseña">
-                                        <label class="mdl-textfield__label" for="contraseña">Contraseña</label>
+                                        <input class="mdl-textfield__input" type="text" id="contraseña" name="contraseña">
+                                        <label class="mdl-textfield__label" for="contraseña">Password:</label>
                                     </div>
                                 </div>
 
                             </div>
-                            <p class="text-center">
-                                <button type="submit"
-                                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
-                                    id="btn-addClient">
+                            <p class="text-center">                               
+                                <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary" id="btn-addClient">
                                     <i class="zmdi zmdi-plus"></i>
                                 </button>
                             </p>
@@ -127,15 +116,14 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="form_actualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar administrador</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar artista</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'actualizar_administrador' %}" method="POST">
+                <form action="{% url 'actualizar_artista' %}" method="POST">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -201,11 +189,11 @@
 <script>
     $(document).ready(function () {
         // Maneja el clic en el botón de editar
-        $(document).on('click', 'a.editar-administrador', function (event) {
+        $(document).on('click', 'a.editar-artista', function (event) {
             event.preventDefault();
             var administradorId = $(this).data('id');
             $.ajax({
-                url: `/listadoAdministradorID/${administradorId}/`,
+                url: `/listadoClienteID/${administradorId}/`,
                 method: 'GET',
                 success: function (data) {
                     $('#id_act').val(data.id_usuario);

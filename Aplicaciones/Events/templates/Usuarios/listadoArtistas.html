@@ -38,7 +38,7 @@
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                     &nbsp;
-                                    <a href="" class="btn btn-danger">
+                                    <a href="{% url 'eliminarUsuario' artistaTemp.id_usuario %}" class="btn btn-danger">
                                         <i class="bi bi-trash"></i>
                                     </a>  
                                     &nbsp;
@@ -127,7 +127,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar administrador</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar artista</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{% url 'actualizar_artista' %}" method="POST">

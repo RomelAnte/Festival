@@ -7,7 +7,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#fecha_inicio").on("input", function () {
+    $("#start_date").on("input", function () {
         if ($(this).val() !== "") {
             $(this).css("color", "#000"); // Color negro si hay un valor
         } else {
@@ -15,7 +15,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#fecha_fin").on("input", function () {
+    $("#end_date").on("input", function () {
         if ($(this).val() !== "") {
             $(this).css("color", "#000"); // Color negro si hay un valor
         } else {

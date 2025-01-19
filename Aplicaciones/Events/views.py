@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Festival, Usuario, TipoUsuario, Biografía
+from .models import Festival, User, TypeUser, Literature
 import random
 
 # Create your views here.
@@ -12,10 +12,10 @@ def login(request):
     return render(request, 'Pages/login.html')
 
 def inicio(request):
-    admin = Usuario.objects.filter(tipo_usuario = 1).count()
-    artistas = Usuario.objects.filter(tipo_usuario = 2).count()
-    organizadores = Usuario.objects.filter(tipo_usuario = 3).count()
-    asistentes = Usuario.objects.filter(tipo_usuario = 4).count()
+    admin = User.objects.filter(type_user = 1).count()
+    artistas = User.objects.filter(type_user = 2).count()
+    organizadores = User.objects.filter(type_user = 3).count()
+    asistentes = User.objects.filter(type_user = 4).count()
     
     return render(
         request, 'home/dashboard.html',
@@ -30,8 +30,8 @@ def inicio(request):
 #Administradores
 #listadoAdministradores
 def listadoAdministradores(request):
-    administradores = Usuario.objects.filter(tipo_usuario=TipoUsuario.objects.get(id_tipo_usuario=1))
-    return render(request, 'Usuarios/listadoAdministradores.html', {'administradores':administradores})
+    administrators = User.objects.filter(type_user_id=1)
+    return render(request, 'Usuarios/listadoAdministradores.html', {'administrators':administrators})
 
 #crearAdministrador
 def crearAdministrador(request):
@@ -41,21 +41,21 @@ def crearAdministrador(request):
     fecha_nacimiento = request.POST.get('fecha_nacimiento')
     correo = request.POST.get('correo')
     contraseña = request.POST.get('contraseña')
-    tipo_usuario = TipoUsuario.objects.get(id_tipo_usuario=1)
+    tipo_usuario = TypeUser.objects.get(id_type = 1)
     
-    usuario = Usuario.objects.create(ci=ci, nombre=nombre, apellido=apellido, fecha_nacimiento=fecha_nacimiento, correo=correo, contraseña=contraseña, tipo_usuario=tipo_usuario)
+    usuario = User.objects.create(ci = ci, name = nombre, last_name = apellido, birthdate = fecha_nacimiento, email = correo, password = contraseña, type_user = tipo_usuario)
     return redirect('listadoAdministradores')
 #Listado por id
 def listadoAdministradorID(request, id):
-    administrador = get_object_or_404(Usuario, ci=id)
+    administrador = get_object_or_404(User, ci=id)
     data = {
-        'id_usuario': administrador.id_usuario,
+        'id_use': administrador.id_use,
         'ci': administrador.ci,
-        'nombre': administrador.nombre,
-        'apellido': administrador.apellido,
-        'fecha_nacimiento': administrador.fecha_nacimiento.strftime('%Y-%m-%d'),
-        'correo': administrador.correo,
-        'contraseña': administrador.contraseña,
+        'name': administrador.name,
+        'last_name': administrador.last_name,
+        'birthdate': administrador.birthdate.strftime('%Y-%m-%d'),
+        'email': administrador.email,
+        'password': administrador.password,
     }
     return JsonResponse(data)
 
@@ -68,19 +68,19 @@ def actualizar_administrador(request):
     fecha_nacimiento = request.POST.get('fecha_nacimiento_act')
     correo = request.POST.get('correo_act')
     contraseña = request.POST.get('contraseña_act')
-    tipo_usuario = TipoUsuario.objects.get(id_tipo_usuario=1)
+    tipo_usuario = TypeUser.objects.get(id_type=1)
         
-    usuario = get_object_or_404(Usuario, id_usuario=id)
+    user = get_object_or_404(User, id_use=id)
 
-    usuario.ci = ci
-    usuario.nombre = nombre
-    usuario.apellido = apellido
-    usuario.fecha_nacimiento = fecha_nacimiento
-    usuario.correo = correo
-    usuario.contraseña = contraseña
-    usuario.tipo_usuario = tipo_usuario
+    user.ci = ci
+    user.name = nombre
+    user.last_name = apellido
+    user.birthdate = fecha_nacimiento
+    user.email = correo
+    user.password = contraseña
+    user.type_user = tipo_usuario
 
-    usuario.save()
+    user.save()
     
     return redirect('listadoAdministradores')
 
@@ -89,8 +89,8 @@ def actualizar_administrador(request):
 #Clientes
 #listadoClientes
 def listadoClientes(request):
-    clientes = Usuario.objects.filter(tipo_usuario=TipoUsuario.objects.get(id_tipo_usuario=4))
-    return render(request, 'Usuarios/listadoClientes.html', {'clientes':clientes})
+    clients = User.objects.filter(type_user=TypeUser.objects.get(id_type=4))
+    return render(request, 'Usuarios/listadoClientes.html', {'clients':clients})
 
 #crearCliente
 def crearCliente(request):
@@ -100,15 +100,15 @@ def crearCliente(request):
     fecha_nacimiento = request.POST.get('fecha_nacimiento')
     correo = request.POST.get('correo')
     contraseña = request.POST.get('contraseña')
-    tipo_usuario = TipoUsuario.objects.get(id_tipo_usuario=4)
+    tipo_usuario = TypeUser.objects.get(id_type=4)
     
-    usuario = Usuario.objects.create(ci=ci, nombre=nombre, apellido=apellido, fecha_nacimiento=fecha_nacimiento, correo=correo, contraseña=contraseña, tipo_usuario=tipo_usuario)
+    usuario = User.objects.create(ci = ci, name = nombre, last_name = apellido, birthdate = fecha_nacimiento, email = correo, password = contraseña, type_user = tipo_usuario)
     return redirect('listadoClientes')
 
 #Artista
 #listadoArtista
 def listadoArtista(request):
-    artista = Usuario.objects.filter(tipo_usuario=TipoUsuario.objects.get(id_tipo_usuario=2))
+    artista = User.objects.filter(tipo_usuario=TypeUser.objects.get(id_tipo_usuario=2))
     return render(request, 'Usuarios/listadoArtistas.html', {'artista':artista})
 
 #crearCliente
@@ -120,9 +120,9 @@ def crearArtista(request):
     correo = request.POST.get('correo')
     contraseña = request.POST.get('contraseña')
     biografia = request.POST.get('biografia')
-    tipo_usuario = TipoUsuario.objects.get(id_tipo_usuario=4)
+    tipo_usuario = TypeUser.objects.get(id_tipo_usuario=4)
     
-    usuario = Usuario.objects.create(
+    usuario = User.objects.create(
         ci = ci, 
         nombre = nombre, 
         apellido = apellido, 
@@ -132,9 +132,9 @@ def crearArtista(request):
         tipo_usuario=tipo_usuario
     )
     
-    id = Usuario.objects.get(ci = ci)
+    id = User.objects.get(ci = ci)
     
-    Biografía.objects.create(
+    Literature.objects.create(
         biografia = biografia,
         usuario = id
     )
@@ -142,7 +142,7 @@ def crearArtista(request):
     return redirect('listadoArtista')
 
 def listadoArtistaID(request, id):
-    administrador = get_object_or_404(Usuario, ci=id)
+    administrador = get_object_or_404(User, ci=id)
     data = {
         'id_usuario': administrador.id_usuario,
         'ci': administrador.ci,
@@ -163,9 +163,9 @@ def actualizar_artista(request):
     fecha_nacimiento = request.POST.get('fecha_nacimiento_act')
     correo = request.POST.get('correo_act')
     contraseña = request.POST.get('contraseña_act')
-    tipo_usuario = TipoUsuario.objects.get(id_tipo_usuario=1)
+    tipo_usuario = TypeUser.objects.get(id_tipo_usuario=1)
         
-    usuario = get_object_or_404(Usuario, id_usuario=id)
+    usuario = get_object_or_404(User, id_usuario=id)
 
     usuario.ci = ci
     usuario.nombre = nombre
@@ -183,7 +183,7 @@ def actualizar_artista(request):
 #Organizadores
 #listadoOrganizadores
 def listadoOrganizadores(request):
-    organizador = Usuario.objects.filter(tipo_usuario=TipoUsuario.objects.get(id_tipo_usuario=3))
+    organizador = User.objects.filter(tipo_usuario=TypeUser.objects.get(id_tipo_usuario=3))
     return render(request, 'Usuarios/listadoOrganizadores.html', {'organizador':organizador})
 
 #crearOrganizadores
@@ -194,9 +194,9 @@ def crearOrganizadores(request):
     fecha_nacimiento = request.POST.get('fecha_nacimiento')
     correo = request.POST.get('correo')
     contraseña = request.POST.get('contraseña')
-    tipo_usuario = TipoUsuario.objects.get(id_tipo_usuario=3)
+    tipo_usuario = TypeUser.objects.get(id_tipo_usuario=3)
     
-    usuario = Usuario.objects.create(
+    usuario = User.objects.create(
         ci = ci, 
         nombre = nombre, 
         apellido = apellido, 
@@ -206,29 +206,72 @@ def crearOrganizadores(request):
         tipo_usuario=tipo_usuario
     )
     
-    return redirect('listadoClientes')
+    return redirect('listadoOrganizadores')
+
+def eliminarUsuario(request, id):
+    usuario = get_object_or_404(User, id_use=id)
+    usuario.delete()
+    return redirect('listadoArtista')
+
 
 def festival_list(request):
-    festivales = Festival.objects.all()
-    return render(request, 'Festivales/listarFestival.html', {'festivales': festivales})
+    festivals = Festival.objects.all()
+    return render(request, 'Festivals/listFestival.html', {'festivals': festivals})
 
 def crear_festival(request):
     # Obtener los datos del formulario manualmente
-    nombre = request.POST.get('nombre')
-    ubicacion = request.POST.get('ubicacion')
-    fecha_inicio = request.POST.get('fecha_inicio')
-    fecha_fin = request.POST.get('fecha_fin')
-    descripcion = request.POST.get('descripcion')
+    nombre = request.POST.get('name')
+    ubicacion = request.POST.get('location')
+    fecha_inicio = request.POST.get('start_date')
+    fecha_fin = request.POST.get('end_date')
+    descripcion = request.POST.get('description')
     usuario_id = random.randint(1, 1000)
-    
-    id = Usuario.objects.get(id_usuario = usuario_id)
-    
+
     Festival.objects.create(
-        nombre=nombre,
-        ubicacion=ubicacion,
-        fecha_inicio=fecha_inicio,
-        fecha_fin=fecha_fin,
-        descripcion=descripcion,
-        usuario=id
+        name = nombre,
+        address = ubicacion,
+        startDate = fecha_inicio,
+        endDate = fecha_fin,
+        description = descripcion,
+        user_id = usuario_id
     )
-    return redirect('crear_festival')
+    return redirect('festival_list')
+
+def listadoFestivalID(request, id):
+    festival = get_object_or_404(Festival, id_fes=id)
+    data = {
+        'id_festival': festival.id_fes,
+        'name_act': festival.name,
+        'location_act': festival.address,
+        'start_date_act': festival.startDate.strftime('%Y-%m-%d'),
+        'end_date_act': festival.endDate.strftime('%Y-%m-%d'),
+        'description_act': festival.description,
+    }
+    return JsonResponse(data)
+
+#actulaizarAdministradores
+def actualizar_festival(request):
+    id = request.POST.get('id_act')
+    name = request.POST.get('name_act')
+    location = request.POST.get('location_act')
+    start = request.POST.get('start_date_act')
+    end = request.POST.get('end_date_act')
+    descripction = request.POST.get('description_act')
+        
+    festival = get_object_or_404(Festival, id_fes=id)
+    
+    festival.name = name
+    festival.address = location
+    festival.startDate = start
+    festival.endDate = end
+    festival.description = descripction
+
+    festival.save()
+    
+    return redirect('festival_list')
+
+def deleteFestival(request, id):
+    festival = get_object_or_404(Festival, id_fes=id)
+    festival.delete()
+    
+    return redirect('festival_list')

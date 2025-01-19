@@ -1,0 +1,206 @@
+{% extends '../Plantilla.html'%}
+{% block body %}
+<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+    <div class="mdl-tabs__tab-bar">
+        <a href="#tabListFestival" class="mdl-tabs__tab is-active">FESTIVALS</a>
+        <a href="#tabNewFestival" class="mdl-tabs__tab">NEW</a>
+    </div>
+    <div class="mdl-tabs__panel is-active" id="tabListFestival">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
+                <div class="full-width panel mdl-shadow--2dp">
+                    <div class="full-width panel-tittle bg-success text-center tittles">
+                        List of Festivals 
+                    </div>
+                    <div class="full-width panel-content">
+                        <form action="#">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                                <label class="mdl-button mdl-js-button mdl-button--icon" for="searchFestival">
+                                    <i class="zmdi zmdi-search"></i>
+                                </label>
+                                <div class="mdl-textfield__expandable-holder">
+                                    <input class="mdl-textfield__input" type="text" id="searchFestival">
+                                    <label class="mdl-textfield__label"></label>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="mdl-list">
+                            {% for festival in festivals %}
+                            <div class="mdl-list__item mdl-list__item--two-line">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="zmdi zmdi-balance"></i>
+                                    <span>{{ festival.name }}</span>
+                                    <span class="mdl-list__item-sub-title">{{ festival.address }}</span>
+                                </span>
+                                <a href="#" class="btn btn-success editar-festival"
+                                    data-id="{{ festival.id_fes }}" data-bs-toggle="modal"
+                                    data-bs-target="#form_actualizar_festival">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                &nbsp;
+                                <a href="{% url 'deleteFestival' festival.id_fes %}" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                &nbsp;
+                                <a href="" class="btn btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
+                            {% endfor %}
+                            <li class="full-width divider-menu-h"></li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mdl-tabs__panel" id="tabNewFestival">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <div class="full-width panel mdl-shadow--2dp">
+                    <div class="full-width panel-tittle bg-primary text-center tittles">
+                        New Festival
+                    </div>
+                    <div class="full-width panel-content">
+                        <form action="{% url 'crear_festival' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mdl-grid">
+                                <div class="mdl-cell mdl-cell--12-col">
+                                    <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; </legend><br>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="name" name="name">
+                                        <label class="mdl-textfield__label" for="name">Name:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="location" name="location">
+                                        <label class="mdl-textfield__label" for="location">Location:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="date" id="start_date" name="start_date" style="color: transparent;">
+                                        <label class="mdl-textfield__label" for="start_date">Start Date</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="date" id="end_date" name="end_date" style="color: transparent;">
+                                        <label class="mdl-textfield__label" for="end_date">End Date</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--12-col">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <textarea class="mdl-textfield__input" id="description" name="description"></textarea>
+                                        <label class="mdl-textfield__label" for="description">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-center">
+                                <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary" id="btn-addFestival">
+                                    <i class="zmdi zmdi-plus"></i>
+                                </button>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    
+    <div class="modal fade" id="form_actualizar_festival" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update Festival</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'actualizar_festival' %}" method="POST">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; </legend><br>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <input class="mdl-textfield__input" type="text" id="id_act" name="id_act" hidden>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="name_act" name="name_act">
+                                    <label class="mdl-textfield__label" for="name_act">Name:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="location_act" name="location_act">
+                                    <label class="mdl-textfield__label" for="location_act">Location:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="date" id="start_date_act" name="start_date_act">
+                                    <label class="mdl-textfield__label" for="start_date_act">Start Date</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="date" id="end_date_act" name="end_date_act">
+                                    <label class="mdl-textfield__label" for="end_date_act">End Date</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <textarea class="mdl-textfield__input" id="description_act" name="description_act"></textarea>
+                                    <label class="mdl-textfield__label" for="description_act">Description</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Handle click on edit button
+        $(document).on('click', 'a.editar-festival', function (event) {
+            event.preventDefault();
+            var festivalID = $(this).data('id');
+            $.ajax({
+                url: `/listadoFestivalID/${festivalID}/`,
+                method: 'GET',
+                success: function (data) {
+                    $('#id_act').val(data.id_festival);
+                    $('#name_act').val(data.name_act);
+                    $('#location_act').val(data.location_act);
+                    $('#start_date_act').val(data.start_date_act);
+                    $('#end_date_act').val(data.end_date_act);
+                    $('#description_act').val(data.description_act);
+            
+                    $('#id_act').parent().addClass('is-dirty'); 
+                    $('#name_act').parent().addClass('is-dirty'); 
+                    $('#location_act').parent().addClass('is-dirty'); 
+                    $('#start_date_act').parent().addClass('is-dirty'); 
+                    $('#end_date_act').parent().addClass('is-dirty'); 
+                    $('#description_act').parent().addClass('is-dirty'); 
+
+                    // Show update modal
+                    $('#form_actualizar_festival').modal('show');
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

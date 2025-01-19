@@ -1,0 +1,236 @@
+{% extends '../Plantilla.html'%}
+{% block body %}
+<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+    <div class="mdl-tabs__tab-bar">
+        <a href="#tabListClient" class="mdl-tabs__tab is-active">LIST</a>
+        <a href="#tabNewClient" class="mdl-tabs__tab">NEW</a>
+    </div>
+    <div class="mdl-tabs__panel is-active" id="tabListClient">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
+                <div class="full-width panel mdl-shadow--2dp">
+                    <div class="full-width panel-tittle bg-success text-center tittles">
+                        List of Administrators
+                    </div>
+                    <div class="full-width panel-content">
+                        <form action="#">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+                                <label class="mdl-button mdl-js-button mdl-button--icon" for="searchClient">
+                                    <i class="zmdi zmdi-search"></i>
+                                </label>
+                                <div class="mdl-textfield__expandable-holder">
+                                    <input class="mdl-textfield__input" type="text" id="searchClient">
+                                    <label class="mdl-textfield__label"></label>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="mdl-list">
+                            {% for administratorsTemp in administrators %}
+                            <div class="mdl-list__item mdl-list__item--two-line">
+                                <span class="mdl-list__item-primary-content">
+                                    <i class="zmdi zmdi-account mdl-list__item-avatar"></i>
+                                    <span>{{administratorsTemp.name}} {{administratorsTemp.last_name}}</span>
+                                    <span class="mdl-list__item-sub-title">{{administratorsTemp.ci}}</span>
+                                </span>
+                                <a href="#" class="btn btn-success editar-administrador"
+                                    data-id="{{ administratorsTemp.ci }}" data-bs-toggle="modal"
+                                    data-bs-target="#form_actualizar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                &nbsp;
+                                <a href="{% url 'eliminarUsuario' administratorsTemp.id_use %}" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                &nbsp;
+                                <a href="" class="btn btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
+                            {% endfor %}
+                            <li class="full-width divider-menu-h"></li>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="mdl-tabs__panel" id="tabNewClient">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <div class="full-width panel mdl-shadow--2dp">
+                    <div class="full-width panel-tittle bg-primary text-center tittles">
+                        New Administrator
+                    </div>
+                    <div class="full-width panel-content">
+                        <form action="{% url 'crearAdministrador' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mdl-grid">
+                                <div class="mdl-cell mdl-cell--12-col">
+                                    <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
+                                    </legend><br>
+                                </div>
+                                <div class="mdl-cell mdl-cell--12-col">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
+                                            id="ci" name="ci">
+                                        <label class="mdl-textfield__label" for="ci">C.I.:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text"
+                                            pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="nombre" name="nombre">
+                                        <label class="mdl-textfield__label" for="nombre">Name:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text"
+                                            pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="apellido" name="apellido">
+                                        <label class="mdl-textfield__label" for="apellido">Last name:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="date" id="fecha_nacimiento"
+                                            style="color: transparent;" name="fecha_nacimiento">
+                                        <label class="mdl-textfield__label" for="fecha_nacimiento">Date of birth:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="email" id="correo" name="correo">
+                                        <label class="mdl-textfield__label" for="correo">Email:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="contraseña"
+                                            name="contraseña">
+                                        <label class="mdl-textfield__label" for="contraseña">Password:</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <p class="text-center">
+                                <button type="submit"
+                                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
+                                    id="btn-addClient">
+                                    <i class="zmdi zmdi-plus"></i>
+                                </button>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="form_actualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update administrator</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'actualizar_administrador' %}" method="POST">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
+                                </legend><br>
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input type="text" class="form-control" id="id_act" name="id_act" hidden>
+                                    <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
+                                        id="ci_act" name="ci_act">
+                                    <label class="mdl-textfield__label" for="ci_act">C.I.:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text"
+                                        pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="nombre_act" name="nombre_act">
+                                    <label class="mdl-textfield__label" for="nombre_act">Name:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text"
+                                        pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="apellido_act"
+                                        name="apellido_act">
+                                    <label class="mdl-textfield__label" for="apellido_act">Last name:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="date" id="fecha_nacimiento_act"
+                                        name="fecha_nacimiento_act">
+                                    <label class="mdl-textfield__label" for="fecha_nacimiento_act">Date of birth:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="email" id="correo_act" name="correo_act">
+                                    <label class="mdl-textfield__label" for="correo_act">Email:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="contraseña_act"
+                                        name="contraseña_act">
+                                    <label class="mdl-textfield__label" for="contraseña_act">Password:</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Maneja el clic en el botón de editar
+        $(document).on('click', 'a.editar-administrador', function (event) {
+            event.preventDefault();
+            var administradorId = $(this).data('id');
+            $.ajax({
+                url: `/listadoAdministradorID/${administradorId}/`,
+                method: 'GET',
+                success: function (data) {
+                    $('#id_act').val(data.id_use);
+                    $('#ci_act').val(data.ci);
+                    $('#nombre_act').val(data.name);
+                    $('#apellido_act').val(data.last_name);
+                    $('#fecha_nacimiento_act').val(data.birthdate);
+                    $('#correo_act').val(data.email);
+                    $('#contraseña_act').val(data.password);
+            
+                    $('#ci_act').parent().addClass('is-dirty'); 
+                    $('#nombre_act').parent().addClass('is-dirty'); 
+                    $('#apellido_act').parent().addClass('is-dirty'); 
+                    $('#fecha_nacimiento_act').parent().addClass('is-dirty'); 
+                    $('#correo_act').parent().addClass('is-dirty'); 
+                    $('#contraseña_act').parent().addClass('is-dirty'); 
+
+                    // Muestra el modal de actualización
+                    $('#form_actualizar').modal('show');
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+
+</script>
+
+{% endblock %}

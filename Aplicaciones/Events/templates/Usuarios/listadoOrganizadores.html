@@ -10,7 +10,7 @@
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-success text-center tittles">
-                        Listado de Clientes
+                        Listado Organizadores
                     </div>
                     <div class="full-width panel-content">
                         <form action="#">
@@ -25,18 +25,18 @@
                             </div>
                         </form>
                         <div class="mdl-list">
-                            {% for clientesTemp in clientes %}
+                            {% for organizadorTemp in organizador %}
                                 <div class="mdl-list__item mdl-list__item--two-line">
                                     <span class="mdl-list__item-primary-content">
                                         <i class="zmdi zmdi-account mdl-list__item-avatar"></i>
-                                        <span>{{clientesTemp.nombre}} {{clientesTemp.apellido}}</span>
-                                        <span class="mdl-list__item-sub-title">{{clientesTemp.ci}}</span>
+                                        <span>{{organizadorTemp.nombre}} {{organizadorTemp.apellido}}</span>
+                                        <span class="mdl-list__item-sub-title">{{organizadorTemp.ci}}</span>
                                     </span>
-                                    <a href="" class="btn btn-success">
+                                    <a href="#" class="btn btn-success">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                     &nbsp;
-                                    <a href="" class="btn btn-danger">
+                                    <a href="{% url 'eliminarUsuario' organizadorTemp.id_usuario %}" class="btn btn-danger">
                                         <i class="bi bi-trash"></i>
                                     </a>  
                                     &nbsp;
@@ -48,8 +48,7 @@
                             <li class="full-width divider-menu-h"></li>
                         </div>
                     </div>
-                </div>
-                
+                </div>                
             </div>
         </div>
     </div>
@@ -58,10 +57,10 @@
             <div class="mdl-cell mdl-cell--12-col">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-primary text-center tittles">
-                        Nuevo Cliente
+                        Nuevo Organizador
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crearCliente' %}" method="POST">
+                        <form action="{% url 'crearOrganizadores' %}" method="POST">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -69,41 +68,40 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?" id="ci_act" name="ci_act">
-                                        <label class="mdl-textfield__label" for="ci_act">C.I.:</label>
+                                        <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?" id="ci" name="ci">
+                                        <label class="mdl-textfield__label" for="ci">C.I.:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="nombre_act" name="nombre_act">
-                                        <label class="mdl-textfield__label" for="nombre_act">Nombre:</label>
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="nombre" name="nombre">
+                                        <label class="mdl-textfield__label" for="nombre">Nombre:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="apellido_act" name="apellido_act">
-                                        <label class="mdl-textfield__label" for="apellido_act">Apellido</label>
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="apellido" name="apellido">
+                                        <label class="mdl-textfield__label" for="apellido">Apellido</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="date" id="fecha_nacimiento_act" style="color: transparent;" name="fecha_nacimiento_act">
-                                        <label class="mdl-textfield__label" for="fecha_nacimiento_act">Fecha de nacimiento</label>
+                                        <input class="mdl-textfield__input" type="date" id="fecha_nacimiento" style="color: transparent;" name="fecha_nacimiento">
+                                        <label class="mdl-textfield__label" for="fecha_nacimiento">Fecha de nacimiento</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="email" id="correo_act" name="correo_act"> 
-                                        <label class="mdl-textfield__label" for="correo_act">Correo</label>
+                                        <input class="mdl-textfield__input" type="email" id="correo" name="correo"> 
+                                        <label class="mdl-textfield__label" for="correo">Correo</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" id="contraseña_act" name="contraseña_act">
-                                        <label class="mdl-textfield__label" for="contraseña_act">Contraseña</label>
+                                        <input class="mdl-textfield__input" type="text" id="contraseña" name="contraseña">
+                                        <label class="mdl-textfield__label" for="contraseña">Contraseña</label>
                                     </div>
                                 </div>
-
                             </div>
                             <p class="text-center">                               
                                 <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary" id="btn-addClient">
@@ -116,7 +114,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 {% endblock %}

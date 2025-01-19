@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_browser_reload',
-    'Aplicaciones.Eventos',
+    'Aplicaciones.Events',
 ]
 
 MIDDLEWARE = [
@@ -78,15 +78,12 @@ WSGI_APPLICATION = 'festivalMusical.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eventos',
-        'USER': 'root',
-        'PASSWORD':'',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Events',
+        'USER': 'postgres',
+        'PASSWORD':'1234',
         'HOST': 'localhost',
-        'PORT': 3306,
-        'OPTIONS': {
-            'sql_mode': 'STRICT_TRANS_TABLES',
-        },
+        'PORT': 5432,
     }
 }
 
