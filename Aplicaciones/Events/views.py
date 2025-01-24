@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Festival, User, TypeUser, Literature
+from .models import Festival, User, TypeUser, Literature, Licence, Audit
 import random
 
 # Create your views here.
@@ -275,3 +275,56 @@ def deleteFestival(request, id):
     festival.delete()
     
     return redirect('festival_list')
+
+def listLicences(request):
+    licences = Licence.objects.all()
+    return render(request, 'Licences/listLicences.html', {'licences': licences})
+
+def createLicence(request):
+    type = request.POST.get('licence')
+    price = request.POST.get('price')
+    acronnym = request.POST.get('acronnym')
+    
+    Licence.objects.create(
+        type = type,
+        price = price,
+        acronnym = acronnym
+    )
+    
+    return redirect('listLicences')
+
+def listLicencesID(request, id):
+    licence = get_object_or_404(Licence, id_lic=id)
+    data = {
+        'id_lic': licence.id_lic,
+        'type': licence.type,
+        'price': licence.price,
+        'acronnym': licence.acronnym,
+        'status': licence.status
+    }
+    return JsonResponse(data)
+
+def updateLicence(request):
+    id = request.POST.get('id_act')
+    type = request.POST.get('licence_act')
+    price = request.POST.get('price_act')
+    acronnym = request.POST.get('acronnym_act')
+    is_active= request.POST.get('status_act')
+    status = True if is_active == "true" else False
+    
+    licence = get_object_or_404(Licence, id_lic=id)
+    
+    licence.type = type
+    licence.price = price
+    licence.acronnym = acronnym
+    licence.status = status
+    
+    licence.save()
+    
+    return redirect('listLicences')
+
+def deleteLicence(request, id):
+    licence = get_object_or_404(Licence, id_lic=id)
+    licence.delete()
+    
+    return redirect('listLicences')

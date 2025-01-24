@@ -52,3 +52,18 @@ class Sale(models.Model):
     date = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     entrace = models.ForeignKey(Entrance, on_delete=models.CASCADE)
+
+class Licence(models.Model):
+    id_lic = models.AutoField(primary_key=True)
+    type = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    acronnym = models.CharField(max_length=30)
+    status = models.BooleanField(default=True)
+    
+class Audit(models.Model):
+    id_audit = models.AutoField(primary_key=True)
+    date = models.DateTimeField()
+    description = models.TextField()
+    gender = models.CharField(max_length=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    

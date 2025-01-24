@@ -25,5 +25,12 @@ urlpatterns = [
     path('actualizar_festival/', views.actualizar_festival, name='actualizar_festival'),  
     path('deleteFestival/<id>/', views.deleteFestival, name='deleteFestival'),  
     
+    path('listLicences/', views.listLicences, name='listLicences'),
+    path('createLicence/', views.createLicence, name='createLicence'),
+    path('listLicencesID/<id>/', views.listLicencesID, name='listLicencesID'),
+    path('updateLicence/', views.updateLicence, name='updateLicence'),
+    path('deleteLicence/<id>/', views.deleteLicence, name='deleteLicence'),
+    
+    
     
 ]

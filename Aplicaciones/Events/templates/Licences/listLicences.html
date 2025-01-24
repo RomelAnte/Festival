@@ -10,7 +10,7 @@
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-success text-center tittles">
-                        List of Festivals 
+                        List of Licences
                     </div>
                     <div class="full-width panel-content">
                         <form action="#">
@@ -25,20 +25,21 @@
                             </div>
                         </form>
                         <div class="mdl-list">
-                            {% for festival in festivals %}
+                            {% for licence in licences %}
                             <div class="mdl-list__item mdl-list__item--two-line">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="zmdi zmdi-balance"></i>
-                                    <span>{{ festival.name }}</span>
-                                    <span class="mdl-list__item-sub-title">{{ festival.address }}</span>
+                                    <span>{{ licence.type }}</span>
+                                    <span class="mdl-list__item-sub-title">{{ licence.price }}</span>
+                                    <span class="mdl-list__item-sub-title">{{ licence.acronnym }}</span>
                                 </span>
                                 <a href="#" class="btn btn-success editar-festival"
-                                    data-id="{{ festival.id_fes }}" data-bs-toggle="modal"
-                                    data-bs-target="#form_actualizar_festival">
+                                    data-id="{{ licence.id_lic }}" data-bs-toggle="modal"
+                                    data-bs-target="#form_actualizar_licence">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                                 &nbsp;
-                                <a href="{% url 'deleteFestival' festival.id_fes %}" class="btn btn-danger">
+                                <a href="{% url 'deleteLicence' licence.id_lic %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this licence?');">
                                     <i class="bi bi-trash"></i>
                                 </a>
                                 &nbsp;
@@ -59,10 +60,10 @@
             <div class="mdl-cell mdl-cell--12-col">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-primary text-center tittles">
-                        New Festival
+                        New Licence
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crear_festival' %}" method="POST">
+                        <form action="{% url 'createLicence' %}" method="POST">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -70,32 +71,23 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" id="name" name="name">
-                                        <label class="mdl-textfield__label" for="name">Name:</label>
+                                        <select name="licence" id="licence" class="mdl-textfield__input">
+                                            <option value="Private">Private</option>
+                                            <option value="Open Sourse">Open Sourse</option>
+                                        </select>
+                                        <label class="mdl-textfield__label" for="licence">Type Licence:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" id="location" name="location">
-                                        <label class="mdl-textfield__label" for="location">Location:</label>
+                                        <input class="mdl-textfield__input" type="number" id="price" name="price">
+                                        <label class="mdl-textfield__label" for="price">Price:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="date" id="start_date" name="start_date" style="color: transparent;">
-                                        <label class="mdl-textfield__label" for="start_date">Start Date</label>
-                                    </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="date" id="end_date" name="end_date" style="color: transparent;">
-                                        <label class="mdl-textfield__label" for="end_date">End Date</label>
-                                    </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--12-col">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <textarea class="mdl-textfield__input" id="description" name="description"></textarea>
-                                        <label class="mdl-textfield__label" for="description">Description</label>
+                                        <input class="mdl-textfield__input" type="text" id="acronnym" name="acronnym">
+                                        <label class="mdl-textfield__label" for="acronnym">Acronnym:</label>
                                     </div>
                                 </div>
                             </div>
@@ -111,14 +103,14 @@
         </div>
     </div> 
     
-    <div class="modal fade" id="form_actualizar_festival" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="form_actualizar_licence" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Update Festival</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'actualizar_festival' %}" method="POST">
+                <form action="{% url 'updateLicence' %}" method="POST">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -128,32 +120,32 @@
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                 <input class="mdl-textfield__input" type="text" id="id_act" name="id_act" hidden>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="name_act" name="name_act">
-                                    <label class="mdl-textfield__label" for="name_act">Name:</label>
+                                    <select name="licence_act" id="licence_act" class="mdl-textfield__input">
+                                        <option value="Private">Private</option>
+                                        <option value="Open Sourse">Open Sourse</option>
+                                    </select>
+                                    <label class="mdl-textfield__label" for="licence_act">Type Licence:</label>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="location_act" name="location_act">
-                                    <label class="mdl-textfield__label" for="location_act">Location:</label>
+                                    <input class="mdl-textfield__input" type="number" id="price_act" name="price_act">
+                                    <label class="mdl-textfield__label" for="price_act">Price:</label>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="date" id="start_date_act" name="start_date_act">
-                                    <label class="mdl-textfield__label" for="start_date_act">Start Date</label>
+                                    <input class="mdl-textfield__input" type="text" id="acronnym_act" name="acronnym_act">
+                                    <label class="mdl-textfield__label" for="acronnym_act">Acronnym:</label>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="date" id="end_date_act" name="end_date_act">
-                                    <label class="mdl-textfield__label" for="end_date_act">End Date</label>
-                                </div>
-                            </div>
-                            <div class="mdl-cell mdl-cell--12-col">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <textarea class="mdl-textfield__input" id="description_act" name="description_act"></textarea>
-                                    <label class="mdl-textfield__label" for="description_act">Description</label>
+                                    <select name="status_act" id="status_act" class="mdl-textfield__input">
+                                        <option value="true">Active</option>
+                                        <option value="false">Inactive</option>
+                                    </select>
+                                    <label class="mdl-textfield__label" for="status_act">Status:</label>
                                 </div>
                             </div>
                         </div>
@@ -173,27 +165,25 @@
         // Handle click on edit button
         $(document).on('click', 'a.editar-festival', function (event) {
             event.preventDefault();
-            var festivalID = $(this).data('id');
+            var licenceID = $(this).data('id');
             $.ajax({
-                url: `/listadoFestivalID/${festivalID}/`,
+                url: `/listLicencesID/${licenceID}/`,
                 method: 'GET',
                 success: function (data) {
-                    $('#id_act').val(data.id_festival);
-                    $('#name_act').val(data.name_act);
-                    $('#location_act').val(data.location_act);
-                    $('#start_date_act').val(data.start_date_act);
-                    $('#end_date_act').val(data.end_date_act);
-                    $('#description_act').val(data.description_act);
+                    $('#id_act').val(data.id_lic);
+                    $('#licence_act').val(data.type);
+                    $('#price_act').val(data.price);
+                    $('#acronnym_act').val(data.acronnym);
+                    $('#status_act').val(data.status.toString());  
             
-                    $('#id_act').parent().addClass('is-dirty'); 
-                    $('#name_act').parent().addClass('is-dirty'); 
-                    $('#location_act').parent().addClass('is-dirty'); 
-                    $('#start_date_act').parent().addClass('is-dirty'); 
-                    $('#end_date_act').parent().addClass('is-dirty'); 
-                    $('#description_act').parent().addClass('is-dirty'); 
+                    $('#id').parent().addClass('is-dirty'); 
+                    $('#licence_act').parent().addClass('is-dirty'); 
+                    $('#price_act').parent().addClass('is-dirty'); 
+                    $('#acronnym_act').parent().addClass('is-dirty'); 
+                    $('#status_act').parent().addClass('is-dirty'); 
 
                     // Show update modal
-                    $('#form_actualizar_festival').modal('show');
+                    $('#form_actualizar_licence').modal('show');
                 },
                 error: function (error) {
                     console.log('Error:', error);
