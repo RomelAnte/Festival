@@ -62,7 +62,7 @@ class Licence(models.Model):
     
 class Audit(models.Model):
     id_audit = models.AutoField(primary_key=True)
-    date = models.DateTimeField()
+    date = models.DateField()
     description = models.TextField()
     gender = models.CharField(max_length=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

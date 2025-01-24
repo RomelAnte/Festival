@@ -31,6 +31,12 @@ urlpatterns = [
     path('updateLicence/', views.updateLicence, name='updateLicence'),
     path('deleteLicence/<id>/', views.deleteLicence, name='deleteLicence'),
     
+    path('listAudits/', views.listAudits, name='listAudits'),
+    path('createAudit/', views.createAudit, name='createAudit'),
+    path('listAuditsID/<id>/', views.listAuditsID, name='listAuditsID'),
+    path('updateAudit/', views.updateAudit, name='updateAudit'),
+    path('deleteAudit/<id>/', views.deleteAudit, name='deleteAudit'),
+    
     
     
 ]

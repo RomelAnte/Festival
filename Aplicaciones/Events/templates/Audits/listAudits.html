@@ -10,7 +10,7 @@
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-success text-center tittles">
-                        List of Licences
+                        List of Audits
                     </div>
                     <div class="full-width panel-content">
                         <form action="#">
@@ -25,21 +25,20 @@
                             </div>
                         </form>
                         <div class="mdl-list">
-                            {% for licence in licences %}
+                            {% for audit in audits %}
                             <div class="mdl-list__item mdl-list__item--two-line">
                                 <span class="mdl-list__item-primary-content">
                                     <i class="zmdi zmdi-balance"></i>
-                                    <span>{{ licence.type }}</span>
-                                    <span class="mdl-list__item-sub-title">{{ licence.price }}</span>
-                                    <span class="mdl-list__item-sub-title">{{ licence.acronnym }}</span>
+                                    <span>{{ audit.date }}</span>
+                                    <span class="mdl-list__item-sub-title">{{ audit.description }}</span>
                                 </span>
                                 <a href="#" class="btn btn-success editar-festival"
-                                    data-id="{{ licence.id_lic }}" data-bs-toggle="modal"
-                                    data-bs-target="#form_actualizar_licence">
+                                    data-id="{{ audit.id_audit }}" data-bs-toggle="modal"
+                                    data-bs-target="#form_actualizar_audits">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                                 &nbsp;
-                                <a href="{% url 'deleteLicence' licence.id_lic %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this licence?');">
+                                <a href="{% url 'deleteAudit' audit.id_audit %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this licence?');">
                                     <i class="bi bi-trash"></i>
                                 </a>
                                 &nbsp;
@@ -60,10 +59,10 @@
             <div class="mdl-cell mdl-cell--12-col">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-primary text-center tittles">
-                        New Licence
+                        New Audit
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'createLicence' %}" method="POST">
+                        <form action="{% url 'createAudit' %}" method="POST">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -71,23 +70,33 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <select name="licence" id="licence" class="mdl-textfield__input">
-                                            <option value="Private">Private</option>
-                                            <option value="Open Sourse">Open Sourse</option>
+                                        <input type="date" name="date" id="date" class="mdl-textfield__input">
+                                        <label class="mdl-textfield__label" for="date">Date:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <textarea name="description" id="description" class="mdl-textfield__input"></textarea>
+                                        <label class="mdl-textfield__label" for="description">Description:</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <select name="gender" id="gender" class="mdl-textfield__input">
+                                            <option value="M">Masculine</option>
+                                            <option value="F">Female</option>
                                         </select>
-                                        <label class="mdl-textfield__label" for="licence">Type Licence:</label>
+                                        <label class="mdl-textfield__label" for="gender">Gender:</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="number" id="price" name="price" min="0" step="0.01">
-                                        <label class="mdl-textfield__label" for="price">Price:</label>
-                                    </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" id="acronnym" name="acronnym">
-                                        <label class="mdl-textfield__label" for="acronnym">Acronnym:</label>
+                                        <select name="user" id="user" class="mdl-textfield__input">
+                                            {% for user in users %}
+                                            <option value="{{ user.id_use }}">{{ user.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label class="mdl-textfield__label" for="user">User:</label>
                                     </div>
                                 </div>
                             </div>
@@ -103,14 +112,14 @@
         </div>
     </div> 
     
-    <div class="modal fade" id="form_actualizar_licence" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="form_actualizar_audits" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update Licence</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update Audit</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'updateLicence' %}" method="POST">
+                <form action="{% url 'updateAudit' %}" method="POST">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -118,34 +127,35 @@
                                 <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; </legend><br>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                                <input class="mdl-textfield__input" type="text" id="id_act" name="id_act" hidden>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <select name="licence_act" id="licence_act" class="mdl-textfield__input">
-                                        <option value="Private">Private</option>
-                                        <option value="Open Sourse">Open Sourse</option>
+                                    <input class="mdl-textfield__input" type="text" id="id_act" name="id_act" hidden>
+                                    <input type="date" name="date_act" id="date_act" class="mdl-textfield__input">
+                                    <label class="mdl-textfield__label" for="date_act">Date:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <textarea name="description_act" id="description_act" class="mdl-textfield__input"></textarea>
+                                    <label class="mdl-textfield__label" for="description_act">Description:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <select name="gender_act" id="gender_act" class="mdl-textfield__input">
+                                        <option value="M">Masculine</option>
+                                        <option value="F">Female</option>
                                     </select>
-                                    <label class="mdl-textfield__label" for="licence_act">Type Licence:</label>
+                                    <label class="mdl-textfield__label" for="gender_act">Gender:</label>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="number" id="price_act" name="price_act" min="0" step="0.01">
-                                    <label class="mdl-textfield__label" for="price_act">Price:</label>
-                                </div>
-                            </div>
-                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="acronnym_act" name="acronnym_act">
-                                    <label class="mdl-textfield__label" for="acronnym_act">Acronnym:</label>
-                                </div>
-                            </div>
-                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <select name="status_act" id="status_act" class="mdl-textfield__input">
-                                        <option value="true">Active</option>
-                                        <option value="false">Inactive</option>
+                                    <select name="user_act" id="user_act" class="mdl-textfield__input">
+                                        {% for user in users %}
+                                        <option value="{{ user.id_use }}">{{ user.name }}</option>
+                                        {% endfor %}
                                     </select>
-                                    <label class="mdl-textfield__label" for="status_act">Status:</label>
+                                    <label class="mdl-textfield__label" for="user_act">User:</label>
                                 </div>
                             </div>
                         </div>
@@ -167,23 +177,23 @@
             event.preventDefault();
             var licenceID = $(this).data('id');
             $.ajax({
-                url: `/listLicencesID/${licenceID}/`,
+                url: `/listAuditsID/${licenceID}/`,
                 method: 'GET',
                 success: function (data) {
-                    $('#id_act').val(data.id_lic);
-                    $('#licence_act').val(data.type);
-                    $('#price_act').val(data.price);
-                    $('#acronnym_act').val(data.acronnym);
-                    $('#status_act').val(data.status.toString());  
+                    $('#id_act').val(data.id_audit);
+                    $('#date_act').val(data.date);
+                    $('#description_act').val(data.description);
+                    $('#gender_act').val(data.gender);
+                    $('#user_act').val(data.user);  
             
-                    $('#id').parent().addClass('is-dirty'); 
-                    $('#licence_act').parent().addClass('is-dirty'); 
-                    $('#price_act').parent().addClass('is-dirty'); 
-                    $('#acronnym_act').parent().addClass('is-dirty'); 
-                    $('#status_act').parent().addClass('is-dirty'); 
+                    $('#id_act').parent().addClass('is-dirty'); 
+                    $('#date_act').parent().addClass('is-dirty'); 
+                    $('#description_act').parent().addClass('is-dirty'); 
+                    $('#gender_act').parent().addClass('is-dirty'); 
+                    $('#user_act').parent().addClass('is-dirty'); 
 
                     // Show update modal
-                    $('#form_actualizar_licence').modal('show');
+                    $('#form_actualizar_audits').modal('show');
                 },
                 error: function (error) {
                     console.log('Error:', error);

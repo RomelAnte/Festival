@@ -328,3 +328,59 @@ def deleteLicence(request, id):
     licence.delete()
     
     return redirect('listLicences')
+
+def listAudits(request):
+    audits = Audit.objects.all()
+    users = User.objects.filter(type_user_id=4)
+    return render(request, 'Audits/listAudits.html', {'audits': audits, 'users': users})
+
+def createAudit(request):
+    date = request.POST.get('date')
+    description = request.POST.get('description')
+    gender = request.POST.get('gender')
+    user_id = request.POST.get('user')
+    
+    Audit.objects.create(
+        date = date,        
+        description = description,
+        gender = gender,
+        user_id = user_id
+    )
+    
+    return redirect('listAudits')
+
+def listAuditsID(request, id):
+    audit = get_object_or_404(Audit, id_audit=id)
+    data = {
+        'id_audit': audit.id_audit,
+        'date': audit.date,
+        'description': audit.description,
+        'gender': audit.gender,
+        'user': audit.user.id_use
+    }
+    
+    return JsonResponse(data)
+
+def updateAudit(request):
+    id = request.POST.get('id_act')
+    date = request.POST.get('date_act')
+    description = request.POST.get('description_act')
+    gender = request.POST.get('gender_act')
+    user_id = request.POST.get('user_act')
+    
+    audit = get_object_or_404(Audit, id_audit=id)
+    
+    audit.date = date
+    audit.description = description
+    audit.gender = gender
+    audit.user_id = user_id
+    
+    audit.save()
+    return redirect('listAudits')
+    
+
+def deleteAudit(request, id):
+    audit = get_object_or_404(Audit, id_audit=id)
+    audit.delete()
+    
+    return redirect('listAudits')
