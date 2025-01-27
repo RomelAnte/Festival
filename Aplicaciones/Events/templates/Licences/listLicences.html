@@ -63,7 +63,7 @@
                         New Licence
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'createLicence' %}" method="POST">
+                        <form action="{% url 'createLicence' %}" method="POST" id="form-addLicence">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -110,7 +110,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Update Licence</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'updateLicence' %}" method="POST">
+                <form action="{% url 'updateLicence' %}" method="POST" id="form-updateLicence">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -162,6 +162,74 @@
 
 <script>
     $(document).ready(function () {
+        $('#form-addLicence').validate({
+            rules: {
+                licence: {
+                    required: true,
+                    min: 10
+                },
+                price: {
+                    required: true,
+                    min: 0
+                },
+                acronnym: {
+                    required: true,
+                    min: 3
+                }
+            },
+            messages: {
+                licence: {
+                    required: 'Please enter the type of licence',
+                    min: 'The type of licence must be at least 10 characters long'
+                },
+                price: {
+                    required: 'Please enter the price', 
+                    min: 'The price must be at least 0'
+                },
+                acronnym: {
+                    required: 'Please enter the acronnym',
+                    min: 'The acronnym must be at least 3 characters long'
+                }
+            }
+        }); 
+
+        $('#form-updateLicence').validate({
+            rules: {
+                licence_act: {
+                    required: true,
+                    min: 10
+                },
+                price_act: {
+                    required: true,
+                    min: 0
+                },
+                acronnym_act: {
+                    required: true,
+                    min: 3
+                },
+                status_act: {
+                    required: true
+                }
+            },
+            messages: {
+                licence_act: {
+                    required: 'Please enter the type of licence',
+                    min: 'The type of licence must be at least 10 characters long'
+                },
+                price_act: {
+                    required: 'Please enter the price',
+                    min: 'The price must be at least 0'
+                },
+                acronnym_act: {
+                    required: 'Please enter the acronnym',
+                    min: 'The acronnym must be at least 3 characters long'
+                },
+                status_act: {
+                    required: 'Please enter the status',
+                }
+            }
+        });
+
         // Handle click on edit button
         $(document).on('click', 'a.editar-festival', function (event) {
             event.preventDefault();

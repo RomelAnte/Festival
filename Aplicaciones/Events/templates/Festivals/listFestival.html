@@ -38,7 +38,7 @@
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                                 &nbsp;
-                                <a href="{% url 'deleteFestival' festival.id_fes %}" class="btn btn-danger">
+                                <a href="{% url 'deleteFestival' festival.id_fes %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this festival?')">
                                     <i class="bi bi-trash"></i>
                                 </a>
                                 &nbsp;
@@ -62,7 +62,7 @@
                         New Festival
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crear_festival' %}" method="POST">
+                        <form action="{% url 'crear_festival' %}" method="POST" id="form-addFestival">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -118,7 +118,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Update Festival</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'actualizar_festival' %}" method="POST">
+                <form action="{% url 'actualizar_festival' %}" method="POST" id="form-actualizar">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -170,6 +170,125 @@
 
 <script>
     $(document).ready(function () {
+        $('#form-addFestival').validate({
+            rules: {
+                name: {
+                    required: true,
+                    min: 10
+                },
+                location: {
+                    required: true,
+                    min: 20
+                },
+                start_date: {
+                    required: true,
+                    min: new Date().toISOString().split('T')[0]
+                },
+                end_date: {
+                    required: true,
+                    min: new Date().toISOString().split('T')[0]
+                },
+                description: {
+                    required: true,
+                    min: 20
+                }
+            },
+            messages: {
+                name: {
+                    required: "Please enter a name",
+                    min: "Please enter a valid name"
+                },
+                location: {
+                    required: "Please enter a location",
+                    min: "Please enter a valid location"
+                },
+                start_date: {
+                    required: "Please enter a start date",
+                    min: "Please enter a valid start date"
+                },
+                end_date: {
+                    required: "Please enter a end date",
+                    min: "Please enter a valid end date"
+                },
+                description: {
+                    required: "Please enter a description",
+                    min: "Please enter a valid description"
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.mdl-textfield').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        }
+
+        );
+
+        $('#form-actualizar').validate({
+            rules: {
+                name_act: {
+                    required: true,
+                    min: 10
+                },
+                location_act: {
+                    required: true,
+                    min: 20
+                },
+                start_date_act: {
+                    required: true,
+                    min: new Date().toISOString().split('T')[0]
+                },
+                end_date_act: {
+                    required: true,
+                    min: new Date().toISOString().split('T')[0]
+                },
+                description_act: {
+                    required: true,
+                    min: 20
+                }
+            },
+            messages: {
+                name_act: {
+                    required: "Please enter a name",
+                    min: "Please enter a valid name"
+                },
+                location_act: {
+                    required: "Please enter a location",
+                    min: "Please enter a valid location"
+                },
+                start_date_act: {
+                    required: "Please enter a start date",
+                    min: "Please enter a valid start date"
+                },
+                end_date_act: {
+                    required: "Please enter a end date",
+                    min: "Please enter a valid end date"
+                },
+                description_act: {
+                    required: "Please enter a description",
+                    min: "Please enter a valid description"
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.mdl-textfield').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+
         // Handle click on edit button
         $(document).on('click', 'a.editar-festival', function (event) {
             event.preventDefault();

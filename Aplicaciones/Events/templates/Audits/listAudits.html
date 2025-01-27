@@ -62,7 +62,7 @@
                         New Audit
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'createAudit' %}" method="POST">
+                        <form action="{% url 'createAudit' %}" method="POST" id="form_createAudit">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -119,7 +119,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Update Audit</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'updateAudit' %}" method="POST">
+                <form action="{% url 'updateAudit' %}" method="POST" id="form_actualizar">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -172,6 +172,76 @@
 
 <script>
     $(document).ready(function () {
+        $('#form_createAudit').validate({
+            rules: {
+                date: {
+                    required: true,
+                    min: new Date().toISOString().split('T')[0]
+                },
+                description: {
+                    required: true,
+                    minlength: 10
+                },
+                gender: {
+                    required: true
+                },
+                user: {
+                    required: true
+                }
+            },
+            messages: {
+                date: {
+                    required: 'Please enter a date',
+                    min: 'Please enter a date greater than or equal to the current date'
+                },
+                description: {
+                    required: 'Please enter a description',
+                    minlength: 'Please enter a description greater than 10 characters'
+                },
+                gender: {
+                    required: 'Please enter a gender'
+                },
+                user: {
+                    required: 'Please enter a user'
+                }
+            }
+        });
+
+        $('#form_actualizar').validate({
+            rules: {
+                date_act: {
+                    required: true,
+                    min: new Date().toISOString().split('T')[0]
+                },
+                description_act: {
+                    required: true,
+                    minlength: 10
+                },
+                gender_act: {
+                    required: true
+                },
+                user_act: {
+                    required: true
+                }
+            },
+            messages: {
+                date_act: {
+                    required: 'Please enter a date',
+                    min: 'Please enter a date greater than or equal to the current date'
+                },
+                description_act: {
+                    required: 'Please enter a description',
+                    minlength: 'Please enter a description greater than 10 characters'
+                },
+                gender_act: {
+                    required: 'Please enter a gender'
+                },
+                user_act: {
+                    required: 'Please enter a user'
+                }
+            }
+        });
+
         // Handle click on edit button
         $(document).on('click', 'a.editar-festival', function (event) {
             event.preventDefault();
@@ -202,7 +272,7 @@
         });
     });
 
-    
+
 </script>
 
 {% endblock %}

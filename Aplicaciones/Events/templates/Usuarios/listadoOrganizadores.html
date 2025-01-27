@@ -2,15 +2,15 @@
 {% block body %}
 <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
-        <a href="#tabListClient" class="mdl-tabs__tab is-active" >LISTADO</a>
-        <a href="#tabNewClient" class="mdl-tabs__tab">NUEVO</a>
+        <a href="#tabListClient" class="mdl-tabs__tab is-active" >LIST</a>
+        <a href="#tabNewClient" class="mdl-tabs__tab">NEW</a>
     </div>
     <div class="mdl-tabs__panel is-active" id="tabListClient">
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
                 <div class="full-width panel mdl-shadow--2dp">
                     <div class="full-width panel-tittle bg-success text-center tittles">
-                        Listado Organizadores
+                        List of Organizers
                     </div>
                     <div class="full-width panel-content">
                         <form action="#">
@@ -29,14 +29,17 @@
                                 <div class="mdl-list__item mdl-list__item--two-line">
                                     <span class="mdl-list__item-primary-content">
                                         <i class="zmdi zmdi-account mdl-list__item-avatar"></i>
-                                        <span>{{organizadorTemp.nombre}} {{organizadorTemp.apellido}}</span>
+                                        <span>{{organizadorTemp.name}} {{organizadorTemp.last_name}}</span>
                                         <span class="mdl-list__item-sub-title">{{organizadorTemp.ci}}</span>
                                     </span>
-                                    <a href="#" class="btn btn-success">
+                                    <a href="#" class="btn btn-success editar-artista" 
+                                    data-id="{{organizadorTemp.id_use}}" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#form_actualizar">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                     &nbsp;
-                                    <a href="{% url 'eliminarUsuario' organizadorTemp.id_usuario %}" class="btn btn-danger">
+                                    <a href="{% url 'eliminarUsuario' organizadorTemp.id_use %}" class="btn btn-danger">
                                         <i class="bi bi-trash"></i>
                                     </a>  
                                     &nbsp;
@@ -60,7 +63,7 @@
                         Nuevo Organizador
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crearOrganizadores' %}" method="POST">
+                        <form action="{% url 'crearOrganizadores' %}" method="POST" id="form-addClient">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -114,6 +117,228 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de actualización -->
+    <div class="modal fade" id="form_actualizar" tabindex="-1" role="dialog" aria-labelledby="form_actualizar" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="form_actualizar">Actualizar Organizador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'actualizar_organizador' %}" method="POST" id="form-actualizar">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="id_act">
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; </legend><br>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?" id="ci_act" name="ci_act">
+                                    <label class="mdl-textfield__label" for="ci_act">C.I.:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="nombre_act" name="nombre_act">
+                                    <label class="mdl-textfield__label" for="nombre_act">Nombre:</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" pattern="-?[A-Za-záéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="apellido_act" name="apellido_act">
+                                    <label class="mdl-textfield__label" for="apellido_act">Apellido</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="date" id="fecha_nacimiento_act" name="fecha_nacimiento_act">
+                                    <label class="mdl-textfield__label" for="fecha_nacimiento_act">Fecha de nacimiento</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="email" id="correo_act" name="correo_act"> 
+                                    <label class="mdl-textfield__label" for="correo_act">Correo</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="contraseña_act" name="contraseña_act">
+                                    <label class="mdl-textfield__label" for="contraseña_act">Contraseña</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        jQuery.validator.addMethod("soloLetrasEspacios", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
+        }, "Por favor, ingrese solo letras y espacios.");
+        
+        // Inicializa el formulario de agregar artista
+        $('#form-addClient').validate({
+            rules: {
+                ci: {
+                    required: true,
+                    number: true,
+                    minlength: 10
+                },
+                nombre: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento: {
+                    required: true
+                },
+                correo: {
+                    required: true,
+                    email: true
+                },
+                contraseña: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                ci: {
+                    required: 'El campo C.I. es obligatorio',
+                    number: 'El campo C.I. debe ser un número',
+                    minlength: 'El campo C.I. debe tener al menos 10 caracteres'
+                },
+                nombre: {
+                    required: 'El campo nombre es obligatorio',
+                    minlength: 'El campo nombre debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo nombre debe contener solo letras y espacios'
+                },
+                apellido: {
+                    required: 'El campo apellido es obligatorio',
+                    minlength: 'El campo apellido debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo apellido debe contener solo letras y espacios'
+                },
+                fecha_nacimiento: {
+                    required: 'El campo fecha de nacimiento es obligatorio'
+                },
+                correo: {
+                    required: 'El campo correo es obligatorio',
+                    email: 'El campo correo debe ser un correo válido'
+                },
+                contraseña: {
+                    required: 'El campo contraseña es obligatorio',
+                    minlength: 'El campo contraseña debe tener al menos 8 caracteres'
+                }
+            }
+        });
+
+        // valida el formulario de actualización
+        $('#form-actualizar').validate({
+            rules: {
+                ci_act: {
+                    required: true,
+                    number: true
+                },
+                nombre_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento_act: {
+                    required: true
+                },
+                correo_act: {
+                    required: true,
+                    email: true
+                },
+                contraseña_act: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                ci_act: {
+                    required: 'El campo C.I. es obligatorio',
+                    number: 'El campo C.I. debe ser un número'
+                },
+                nombre_act: {
+                    required: 'El campo nombre es obligatorio',
+                    minlength: 'El campo nombre debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo nombre debe contener solo letras y espacios'
+                },
+                apellido_act: {
+                    required: 'El campo apellido es obligatorio',
+                    minlength: 'El campo apellido debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo apellido debe contener solo letras y espacios'
+                },
+                fecha_nacimiento_act: {
+                    required: 'El campo fecha de nacimiento es obligatorio'
+                },
+                correo_act: {
+                    required: 'El campo correo es obligatorio',
+                    email: 'El campo correo debe ser un correo válido'
+                },
+                contraseña_act: {
+                    required: 'El campo contraseña es obligatorio',
+                    minlength: 'El campo contraseña debe tener al menos 8 caracteres'
+                }
+            }
+        });
+
+        // Maneja el clic en el botón de editar
+        $(document).on('click', 'a.editar-artista', function (event) {
+            event.preventDefault();
+            var administradorId = $(this).data('id');
+            console.log(administradorId); 
+            $.ajax({
+                url: `/listadoOrganizadorID/${administradorId}/`,
+                method: 'GET',
+                success: function (data) {                    
+                    $('#id_act').val(data.id_usuario);
+                    $('#ci_act').val(data.ci);
+                    $('#nombre_act').val(data.nombre);
+                    $('#apellido_act').val(data.apellido);
+                    $('#fecha_nacimiento_act').val(data.fecha_nacimiento);
+                    $('#correo_act').val(data.correo);
+                    $('#contraseña_act').val(data.contraseña);
+            
+                    $('#ci_act').parent().addClass('is-dirty'); 
+                    $('#nombre_act').parent().addClass('is-dirty'); 
+                    $('#apellido_act').parent().addClass('is-dirty'); 
+                    $('#fecha_nacimiento_act').parent().addClass('is-dirty'); 
+                    $('#correo_act').parent().addClass('is-dirty'); 
+                    $('#contraseña_act').parent().addClass('is-dirty'); 
+
+                    // Muestra el modal de actualización
+                    $('#form_actualizar').modal('show');
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

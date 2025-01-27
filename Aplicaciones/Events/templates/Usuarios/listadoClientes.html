@@ -32,11 +32,13 @@
                                         <span>{{clientTemp.name}} {{clientTemp.last_name}}</span>
                                         <span class="mdl-list__item-sub-title">{{clientTemp.ci}}</span>
                                     </span>
-                                    <a href="" class="btn btn-success">
+                                    <a href="" class="btn btn-success" 
+                                    data-id="{{clientTemp.id_use}}" data-bs-toggle="modal" 
+                                    data-bs-target="#form_actualizar">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                     &nbsp;
-                                    <a href="{% url 'eliminarUsuario' clientTemp.id_use %}" class="btn btn-danger">
+                                    <a href="{% url 'eliminarUsuario' clientTemp.id_use %}" class="btn btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar este cliente?')">
                                         <i class="bi bi-trash"></i>
                                     </a>  
                                     &nbsp;
@@ -61,7 +63,7 @@
                         New Customer
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crearCliente' %}" method="POST">
+                        <form action="{% url 'crearCliente' %}" method="POST" id="form-addClient">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -123,7 +125,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar artista</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'actualizar_artista' %}" method="POST">
+                <form action="{% url 'actualizar_artista' %}" method="POST" id="form-actualizar">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -188,6 +190,128 @@
 </div>
 <script>
     $(document).ready(function () {
+        jQuery.validator.addMethod("soloLetrasEspacios", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
+        }, "Por favor, ingrese solo letras y espacios.");
+        
+        // Inicializa el formulario de agregar artista
+        $('#form-addClient').validate({
+            rules: {
+                ci: {
+                    required: true,
+                    number: true,
+                    minlength: 10
+                },
+                nombre: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento: {
+                    required: true
+                },
+                correo: {
+                    required: true,
+                    email: true
+                },
+                contraseña: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                ci: {
+                    required: 'El campo C.I. es obligatorio',
+                    number: 'El campo C.I. debe ser un número',
+                    minlength: 'El campo C.I. debe tener al menos 10 caracteres'
+                },
+                nombre: {
+                    required: 'El campo nombre es obligatorio',
+                    minlength: 'El campo nombre debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo nombre debe contener solo letras y espacios'
+                },
+                apellido: {
+                    required: 'El campo apellido es obligatorio',
+                    minlength: 'El campo apellido debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo apellido debe contener solo letras y espacios'
+                },
+                fecha_nacimiento: {
+                    required: 'El campo fecha de nacimiento es obligatorio'
+                },
+                correo: {
+                    required: 'El campo correo es obligatorio',
+                    email: 'El campo correo debe ser un correo válido'
+                },
+                contraseña: {
+                    required: 'El campo contraseña es obligatorio',
+                    minlength: 'El campo contraseña debe tener al menos 8 caracteres'
+                }
+            }
+        });
+
+        // valida el formulario de actualización
+        $('#form-actualizar').validate({
+            rules: {
+                ci_act: {
+                    required: true,
+                    number: true
+                },
+                nombre_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento_act: {
+                    required: true
+                },
+                correo_act: {
+                    required: true,
+                    email: true
+                },
+                contraseña_act: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                ci_act: {
+                    required: 'El campo C.I. es obligatorio',
+                    number: 'El campo C.I. debe ser un número'
+                },
+                nombre_act: {
+                    required: 'El campo nombre es obligatorio',
+                    minlength: 'El campo nombre debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo nombre debe contener solo letras y espacios'
+                },
+                apellido_act: {
+                    required: 'El campo apellido es obligatorio',
+                    minlength: 'El campo apellido debe tener al menos 3 caracteres',
+                    soloLetrasEspacios: 'El campo apellido debe contener solo letras y espacios'
+                },
+                fecha_nacimiento_act: {
+                    required: 'El campo fecha de nacimiento es obligatorio'
+                },
+                correo_act: {
+                    required: 'El campo correo es obligatorio',
+                    email: 'El campo correo debe ser un correo válido'
+                },
+                contraseña_act: {
+                    required: 'El campo contraseña es obligatorio',
+                    minlength: 'El campo contraseña debe tener al menos 8 caracteres'
+                }
+            }
+        });
+
         // Maneja el clic en el botón de editar
         $(document).on('click', 'a.editar-artista', function (event) {
             event.preventDefault();
@@ -196,13 +320,13 @@
                 url: `/listadoClienteID/${administradorId}/`,
                 method: 'GET',
                 success: function (data) {
-                    $('#id_act').val(data.id_usuario);
+                    $('#id_act').val(data.id_use);
                     $('#ci_act').val(data.ci);
-                    $('#nombre_act').val(data.nombre);
-                    $('#apellido_act').val(data.apellido);
-                    $('#fecha_nacimiento_act').val(data.fecha_nacimiento);
-                    $('#correo_act').val(data.correo);
-                    $('#contraseña_act').val(data.contraseña);
+                    $('#nombre_act').val(data.name);
+                    $('#apellido_act').val(data.last_name);
+                    $('#fecha_nacimiento_act').val(data.birthdate);
+                    $('#correo_act').val(data.email);
+                    $('#contraseña_act').val(data.password);
             
                     $('#ci_act').parent().addClass('is-dirty'); 
                     $('#nombre_act').parent().addClass('is-dirty'); 

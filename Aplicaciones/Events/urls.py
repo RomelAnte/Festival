@@ -17,6 +17,8 @@ urlpatterns = [
     path('actualizar_artista/', views.actualizar_artista, name='actualizar_artista'),  
     path('listadoOrganizadores/', views.listadoOrganizadores, name='listadoOrganizadores'),
     path('crearOrganizadores/', views.crearOrganizadores, name='crearOrganizadores'),
+    path('listadoOrganizadorID/<id>/', views.listadoOrganizadorID, name='listadoOrganizadorID'),
+    path('actualizar_organizador/', views.actualizar_organizador, name='actualizar_organizador'),
     path('eliminarUsuario/<id>', views.eliminarUsuario, name='eliminarUsuario'),
     
     path('festival_list/', views.festival_list, name='festival_list'),

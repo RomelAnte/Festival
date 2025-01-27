@@ -38,7 +38,7 @@
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                                 &nbsp;
-                                <a href="{% url 'eliminarUsuario' administratorsTemp.id_use %}" class="btn btn-danger">
+                                <a href="{% url 'eliminarUsuario' administratorsTemp.id_use %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this administrator?')">
                                     <i class="bi bi-trash"></i>
                                 </a>
                                 &nbsp;
@@ -63,14 +63,14 @@
                         New Administrator
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crearAdministrador' %}" method="POST">
+                        <form action="{% url 'crearAdministrador' %}" method="POST" id="form-addAdmin">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
                                     </legend><br>
                                 </div>
-                                <div class="mdl-cell mdl-cell--12-col">
+                                <div class="mdl-cell mdl-cell--6-col">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
                                             id="ci" name="ci">
@@ -134,7 +134,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Update administrator</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'actualizar_administrador' %}" method="POST">
+                <form action="{% url 'actualizar_administrador' %}" method="POST" id="form-actualizar">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -198,6 +198,128 @@
 </div>
 <script>
     $(document).ready(function () {
+        // Validación del formulario de agregar
+        jQuery.validator.addMethod("soloLetrasEspacios", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
+        }, "Por favor, ingrese solo letras y espacios.");
+
+        $('#form-addAdmin').validate({
+            rules: {
+                ci: {
+                    required: true,
+                    number: true,
+                    minlength: 10
+                },
+                nombre: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento: {
+                    required: true
+                },
+                correo: {
+                    required: true,
+                    email: true
+                },
+                contraseña: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                ci: {
+                    required: 'The field is required',
+                    number: 'The field must be a number',
+                    min: 'The field must be at least 10 characters'
+                },
+                nombre: {
+                    required: 'The field is required',
+                    minlength: 'The field must be at least 3 characters',
+                    soloLetrasEspacios: 'The field must be only letters and spaces'
+                },
+                apellido: {
+                    required: 'The field is required',
+                    minlength: 'The field must be at least 3 characters',
+                    soloLetrasEspacios: 'The field must be only letters and spaces'
+                },
+                fecha_nacimiento: {
+                    required: 'The field is required'
+                },
+                correo: {
+                    required: 'The field is required',
+                    email: 'The field must be an email'
+                },
+                contraseña: {
+                    required: 'The field is required',
+                    minlength: 'The field must be at least 8 characters'
+                }
+            }
+        });
+
+        // Validación del formulario de actualizar
+        $('#form-actualizar').validate({
+            rules: {
+                ci_act: {
+                    required: true,
+                    number: true
+                },
+                nombre_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento_act: {
+                    required: true
+                },
+                correo_act: {
+                    required: true,
+                    email: true
+                },
+                contraseña_act: {
+                    required: true,
+                    minlength: 8
+                }
+            },
+            messages: {
+                ci_act: {
+                    required: 'The field is required',
+                    number: 'The field must be a number'
+                },
+                nombre_act: {
+                    required: 'The field is required',
+                    minlength: 'The field must be at least 3 characters',
+                    soloLetrasEspacios: 'The field must be only letters and spaces'
+                },
+                apellido_act: {
+                    required: 'The field is required',
+                    minlength: 'The field must be at least 3 characters',
+                    soloLetrasEspacios: 'The field must be only letters and spaces'
+                },
+                fecha_nacimiento_act: {
+                    required: 'The field is required'
+                },
+                correo_act: {
+                    required: 'The field is required',
+                    email: 'The field must be an email'
+                },
+                contraseña_act: {
+                    required: 'The field is required',
+                    minlength: 'The field must be at least 8 characters'
+                }
+            }
+        });
+
         // Maneja el clic en el botón de editar
         $(document).on('click', 'a.editar-administrador', function (event) {
             event.preventDefault();
@@ -230,7 +352,5 @@
             });
         });
     });
-
 </script>
-
 {% endblock %}

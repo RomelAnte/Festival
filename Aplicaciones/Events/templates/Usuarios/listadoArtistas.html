@@ -38,7 +38,7 @@
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                     &nbsp;
-                                    <a href="{% url 'eliminarUsuario' artistaTemp.id_usuario %}" class="btn btn-danger">
+                                    <a href="{% url 'eliminarUsuario' artistaTemp.id_use %}" class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar este artista?')">
                                         <i class="bi bi-trash"></i>
                                     </a>  
                                     &nbsp;
@@ -63,7 +63,7 @@
                         Nuevo Artista
                     </div>
                     <div class="full-width panel-content">
-                        <form action="{% url 'crearArtista' %}" method="POST">
+                        <form action="{% url 'crearArtista' %}" method="POST" id="form-addArtist">
                             {% csrf_token %}
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
@@ -130,7 +130,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizar artista</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'actualizar_artista' %}" method="POST">
+                <form action="{% url 'actualizar_artista' %}" method="POST" id="form-actualizar">
                     <div class="modal-body">
                         {% csrf_token %}
                         <div class="mdl-grid">
@@ -197,6 +197,128 @@
 
 <script>
     $(document).ready(function () {
+        jQuery.validator.addMethod("soloLetrasEspacios", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
+        }, "Por favor, ingrese solo letras y espacios.");
+
+        // Validación del formulario de creación
+        $('#form-addArtist').validate({
+            rules: {
+                ci: {
+                    required: true,
+                    number: true,
+                    minlength: 10,
+                },
+                nombre: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento: {
+                    required: true
+                },
+                correo: {
+                    required: true,
+                    email: true
+                },
+                contraseña: {
+                    required: true,
+                    minlength: 6
+                }
+            },
+            messages: {
+                ci: {
+                    required: 'Por favor, ingrese su C.I.',
+                    number: 'Por favor, ingrese un número válido',
+                    minlength: 'Por favor, ingrese al menos 10 caracteres'
+                },
+                nombre: {
+                    required: 'Por favor, ingrese su nombre',
+                    minlength: 'Por favor, ingrese al menos 3 caracteres',
+                    soloLetrasEspacios: 'Por favor, ingrese solo letras y espacios.'
+                },
+                apellido: {
+                    required: 'Por favor, ingrese su apellido',
+                    minlength: 'Por favor, ingrese al menos 3 caracteres',
+                    soloLetrasEspacios: 'Por favor, ingrese solo letras y espacios.'
+                },
+                fecha_nacimiento: {
+                    required: 'Por favor, ingrese su fecha de nacimiento'
+                },
+                correo: {
+                    required: 'Por favor, ingrese su correo',
+                    email: 'Por favor, ingrese un correo válido'
+                },
+                contraseña: {
+                    required: 'Por favor, ingrese su contraseña',
+                    minlength: 'Por favor, ingrese al menos 6 caracteres'
+                }
+            }
+        });
+
+        // Validación del formulario de actualización
+        $('#form-actualizar').validate({
+            rules: {
+                ci_act: {
+                    required: true,
+                    number: true
+                },
+                nombre_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                apellido_act: {
+                    required: true,
+                    minlength: 3,
+                    soloLetrasEspacios: true
+                },
+                fecha_nacimiento_act: {
+                    required: true
+                },
+                correo_act: {
+                    required: true,
+                    email: true
+                },
+                contraseña_act: {
+                    required: true,
+                    minlength: 6
+                }
+            },
+            messages: {
+                ci_act: {
+                    required: 'Por favor, ingrese su C.I.',
+                    number: 'Por favor, ingrese un número válido'
+                },
+                nombre_act: {
+                    required: 'Por favor, ingrese su nombre',
+                    minlength: 'Por favor, ingrese al menos 3 caracteres',
+                    soloLetrasEspacios: 'Por favor, ingrese solo letras y espacios.'
+                },
+                apellido_act: {
+                    required: 'Por favor, ingrese su apellido',
+                    minlength: 'Por favor, ingrese al menos 3 caracteres',
+                    soloLetrasEspacios: 'Por favor, ingrese solo letras y espacios.'
+                },
+                fecha_nacimiento_act: {
+                    required: 'Por favor, ingrese su fecha de nacimiento'
+                },
+                correo_act: {
+                    required: 'Por favor, ingrese su correo',
+                    email: 'Por favor, ingrese un correo válido'
+                },
+                contraseña_act: {
+                    required: 'Por favor, ingrese su contraseña',
+                    minlength: 'Por favor, ingrese al menos 6 caracteres'
+                }
+            }
+        });
+
         // Maneja el clic en el botón de editar
         $(document).on('click', 'a.editar-artista', function (event) {
             event.preventDefault();
@@ -205,13 +327,13 @@
                 url: `/listadoArtistaID/${administradorId}/`,
                 method: 'GET',
                 success: function (data) {
-                    $('#id_act').val(data.id_usuario);
+                    $('#id_act').val(data.id_use);
                     $('#ci_act').val(data.ci);
-                    $('#nombre_act').val(data.nombre);
-                    $('#apellido_act').val(data.apellido);
-                    $('#fecha_nacimiento_act').val(data.fecha_nacimiento);
-                    $('#correo_act').val(data.correo);
-                    $('#contraseña_act').val(data.contraseña);
+                    $('#nombre_act').val(data.name);
+                    $('#apellido_act').val(data.last_name);
+                    $('#fecha_nacimiento_act').val(data.birthdate);
+                    $('#correo_act').val(data.email);
+                    $('#contraseña_act').val(data.password);
             
                     $('#ci_act').parent().addClass('is-dirty'); 
                     $('#nombre_act').parent().addClass('is-dirty'); 
@@ -229,6 +351,5 @@
             });
         });
     });
-
 </script>
 {% endblock %}
